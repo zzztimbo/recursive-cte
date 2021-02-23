@@ -18,5 +18,4 @@ insert into fam_tree values
   (8, 'Grandchild A1b', 3)
  ;
 
-
-  select * from fam_tree 
+ select * from fam_tree 
