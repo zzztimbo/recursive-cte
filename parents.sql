@@ -1,6 +1,6 @@
 .header on
 .mode column
-.width 5 10 20 10 
+.width auto
 
 create table fam_tree(
   id integer,
@@ -19,23 +19,23 @@ insert into fam_tree values
   (8, 'Grandchild A1b', 3)
  ;
 
-with recursive fam_tree_with_apex as (
+with recursive parents as (
   select id,
-         parent_id,
          name, 
-         name as root_name
+         parent_id,
+         0 as relative_depth
    from fam_tree
-  where parent_id is null 
+  where name = 'Grandchild A1b'
 
   union all
-  
+
   select ft.id, 
-         ft.parent_id, 
          ft.name, 
-         ftwa.root_name
-    from fam_tree ft  
-    join fam_tree_with_apex ftwa 
-      on ft.parent_id = ftwa.id
+         ft.parent_id,
+         p.relative_depth - 1
+    from fam_tree ft 
+    join parents p  
+      on p.parent_id = ft.id 
 )
 
-select * from fam_tree_with_apex
+select * from parents;
