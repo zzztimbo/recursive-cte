@@ -1,5 +1,6 @@
 .header on
 .mode column
+.width auto
 
 create table fam_tree(
   id integer,
@@ -18,4 +19,20 @@ insert into fam_tree values
   (8, 'Grandchild A1b', 3)
  ;
 
- select * from fam_tree 
+with recursive fam_sub_tree as (
+  select id,
+         name, 
+         1 as relative_depth
+   from fam_tree
+  where name = 'Child A1'
+
+  union all
+
+  select ft.id, 
+         ft.name, 
+         fst.relative_depth + 1
+    from fam_tree ft 
+    join fam_sub_tree fst
+      on ft.parent_id = fst.id 
+)
+select * from fam_sub_tree;
