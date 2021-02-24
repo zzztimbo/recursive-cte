@@ -1,41 +1,15 @@
 .header on
 .mode column
-.width 5 10 20 10 
+.width auto
 
-create table fam_tree(
-  id integer,
-  name TEXT,
-  parent_id integer
-);
-
-insert into fam_tree values
-  (1, 'Root A', null),
-  (2, 'Root B', null),
-  (3, 'Child A1', 1),
-  (4, 'Child A2', 1),
-  (5, 'Child B1', 2),
-  (6, 'Child B2', 2),
-  (7, 'Grandchild A1a', 3),
-  (8, 'Grandchild A1b', 3)
- ;
-
-with recursive fam_tree_with_apex as (
-  select id,
-         parent_id,
-         name, 
-         name as root_name
-   from fam_tree
-  where parent_id is null 
+with recursive num_range as (
+  select 1 as num
 
   union all
-  
-  select ft.id, 
-         ft.parent_id, 
-         ft.name, 
-         ftwa.root_name
-    from fam_tree ft  
-    join fam_tree_with_apex ftwa 
-      on ft.parent_id = ftwa.id
+
+  select num + 1
+    from num_range
+   where num < 100 
 )
 
-select * from fam_tree_with_apex
+select * from num_range;
